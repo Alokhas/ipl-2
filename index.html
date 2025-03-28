@@ -24,6 +24,7 @@
             width: 100%;
             border: 2px solid #fff;
             border-radius: 8px;
+            cursor: pointer;
         }
         #telegram-link {
             margin-top: 15px;
@@ -37,7 +38,7 @@
 <body>
 
     <div id="video-container">
-        <video id="video" controls autoplay></video>
+        <video id="video" controls autoplay playsinline></video>
     </div>
 
     <a id="telegram-link" href="https://t.me/Linux_Bots" target="_blank">
@@ -48,22 +49,31 @@
         document.addEventListener("DOMContentLoaded", function () {
             const video = document.getElementById('video');
             
-            // New stream URL
-            const encodedURL = "https://1a-1791.com/live/41ac4fe/slot-5/koeq-jt2v_1080p/chunklist_DVR.m3u8";
+            // Stream URL
+            const streamURL = "https://1a-1791.com/live/41ac4fe/slot-5/koeq-jt2v_1080p/chunklist_DVR.m3u8";
             
             if (Hls.isSupported()) {
                 const hls = new Hls();
-                hls.loadSource(encodedURL);
+                hls.loadSource(streamURL);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, function () {
                     video.play();
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = encodedURL;
+                video.src = streamURL;
                 video.addEventListener('loadedmetadata', function () {
                     video.play();
                 });
             }
+
+            // Toggle Fullscreen on Double Click
+            video.addEventListener("dblclick", function () {
+                if (!document.fullscreenElement) {
+                    video.requestFullscreen().catch(err => console.error("Fullscreen Error:", err));
+                } else {
+                    document.exitFullscreen();
+                }
+            });
         });
     </script>
 
